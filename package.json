@@ -1,0 +1,14 @@
+{
+  "name": "orbit-db-docstore",
+  "version": "1.0.0",
+  "description": "Document Store for orbit-db",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shamb0t",
+  "license": "MIT",
+  "dependencies": {
+    "orbit-db-store": "0.1.3"
+  }
+}
