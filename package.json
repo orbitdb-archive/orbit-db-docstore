@@ -1,8 +1,8 @@
 {
   "name": "orbit-db-docstore",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "Document Store for orbit-db",
-  "main": "index.js",
+  "main": "src/DocumentStore.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,5 +10,14 @@
   "license": "MIT",
   "dependencies": {
     "orbit-db-store": "0.1.3"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamb0t/orbit-db-docstore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shamb0t/orbit-db-docstore/issues"
+  },
+  "homepage": "https://github.com/shamb0t/orbit-db-docstore#readme"
 }
