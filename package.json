@@ -1,6 +1,6 @@
 {
   "name": "orbit-db-docstore",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Document Store for orbit-db",
   "main": "src/DocumentStore.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "^0.1.10"
+    "orbit-db-store": "github:haadcode/orbit-db-store#feat\/immutable-log"
   },
   "devDependencies": {},
   "repository": {
