@@ -27,10 +27,7 @@ class DocumentStore extends Store {
     return this._addOperation({
       op: 'PUT',
       key: doc[this.options.indexBy],
-      value: doc,
-      meta: {
-        ts: new Date().getTime()
-      }
+      value: doc
     });
   }
 
@@ -38,10 +35,7 @@ class DocumentStore extends Store {
     return this._addOperation({
       op: 'DEL',
       key: key,
-      value: null,
-      meta: {
-        ts: new Date().getTime()
-      }
+      value: null
     });
   }
 }
