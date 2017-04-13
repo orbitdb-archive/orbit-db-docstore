@@ -9,15 +9,16 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "~0.2.0"
+    "orbit-db-store": "~1.0.0",
+    "p-map": "^1.1.1"
   },
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shamb0t/orbit-db-docstore.git"
+    "url": "git+https://github.com/orbitdb/orbit-db-docstore.git"
   },
   "bugs": {
-    "url": "https://github.com/shamb0t/orbit-db-docstore/issues"
+    "url": "https://github.com/orbitdb/orbit-db-docstore/issues"
   },
-  "homepage": "https://github.com/shamb0t/orbit-db-docstore#readme"
+  "homepage": "https://github.com/orbitdb/orbit-db-docstore#readme"
 }

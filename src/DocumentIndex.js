@@ -9,21 +9,26 @@ class DocumentIndex {
     return this._index[key]
   }
 
-  updateIndex(oplog) {
-    oplog.items
+  updateIndex(oplog, onProgressCallback) {
+    const reducer = (handled, item, idx) => {
+      // if (handled.indexOf(item.payload.key) === -1) {
+      if (handled[item.payload.key] !== true) {
+        // handled.push(item.payload.key)
+        handled[item.payload.key] = true
+        if(item.payload.op === 'PUT') {
+          this._index[item.payload.key] = item.payload.value
+        } else if (item.payload.op === 'DEL') {
+          delete this._index[item.payload.key]
+        }
+      }
+      if (onProgressCallback) onProgressCallback(item, idx)
+      return handled
+    }
+
+    oplog.values
       .slice()
       .reverse()
-      .reduce((handled, item) => {
-        if (handled.indexOf(item.payload.key) === -1) {
-          handled.push(item.payload.key)
-          if(item.payload.op === 'PUT') {
-            this._index[item.payload.key] = item.payload.value
-          } else if (item.payload.op === 'DEL') {
-            delete this._index[item.payload.key]
-          }
-        }
-        return handled
-      }, [])
+      .reduce(reducer, {})
   }
 }
 
