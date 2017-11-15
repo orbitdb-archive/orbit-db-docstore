@@ -16,31 +16,58 @@ class DocumentStore extends Store {
     this._type = 'docstore'
   }
 
-  get(key, caseSensitive = false) {
+  get(key, options = {}) {
+    // Default options
+    options = Object.assign({}, { caseSensitive: false, fullOp: false }, options)
+
+    // Make sure the key is a string
     key = key.toString()
-    const terms = key.split(' ')
-    key = terms.length > 1 ? replaceAll(key, '.', ' ').toLowerCase() : key.toLowerCase()
 
-    const search = (e) => {
-      if (terms.length > 1) {
-        return replaceAll(e, '.', ' ').toLowerCase().indexOf(key) !== -1
+    // If the key contain spaces, consider it as multiple terms
+    const parts = key.split(' ')
+
+    // Not sure what this is?
+    key = parts.length > 1 
+      ? replaceAll(key, '.', ' ').toLowerCase() 
+      : key.toLowerCase()
+
+    // Find a text from a given string (true|false)
+    const search = (str, text, parts) => {
+      if (parts.length > 1) {
+        return replaceAll(str, '.', ' ').toLowerCase().indexOf(text) !== -1
       }
-      return e.toLowerCase().indexOf(key) !== -1
+      return str.toLowerCase().indexOf(text) !== -1
     }
-    const mapper = e => this._index.get(e)
-    const filter = e => caseSensitive
-      ? e.indexOf(key) !== -1 
-      : search(e)
 
-    return Object.keys(this._index._index)
+    // Search for the given key from the values
+    const filter = e => options.caseSensitive
+      ? e.indexOf(key) !== -1 
+      : search(e, key, parts)
+
+    // Get a document from the index with a key
+    const getFromIndex = e => this._index.get(e)
+
+    // If full operation wasn't requested, 
+    // return only the actual document
+    const transformOperation = e => options.fullOp ? e : e.payload.value
+
+    return this._index.keys()
       .filter(filter)
-      .map(mapper)
+      .map(getFromIndex)
+      .map(transformOperation)
   }
 
-  query(mapper) {
-    return Object.keys(this._index._index)
-      .map((e) => this._index.get(e))
-      .filter((e) => mapper(e))
+  query(mapper, options = {}) {
+    // Default options
+    options = Object.assign({}, { fullOp: false }, options)
+
+    // If full operation wasn't requested, 
+    // return only the actual document
+    const transformOperation = e => options.fullOp ? e : e.payload.value
+
+    return this._index.all()
+      .map(transformOperation)
+      .filter(mapper)
   }
 
   batchPut(docs, onProgressCallback) {
