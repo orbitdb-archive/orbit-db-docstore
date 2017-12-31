@@ -9,7 +9,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "~2.1.0",
+    "orbit-db-store": "~2.2.0",
     "p-map": "~1.1.1"
   },
   "devDependencies": {},
