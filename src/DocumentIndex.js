@@ -5,8 +5,10 @@ class DocumentIndex {
     this._index = {}
   }
 
-  get(key) {
-    return this._index[key]
+  get(key, fullOp = false) {
+    return fullOp
+      ? this._index[key]
+      : this._index[key].payload.value
   }
 
   updateIndex(oplog, onProgressCallback) {
@@ -16,7 +18,7 @@ class DocumentIndex {
         // handled.push(item.payload.key)
         handled[item.payload.key] = true
         if(item.payload.op === 'PUT') {
-          this._index[item.payload.key] = item.payload.value
+          this._index[item.payload.key] = item
         } else if (item.payload.op === 'DEL') {
           delete this._index[item.payload.key]
         }
