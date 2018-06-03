@@ -1,6 +1,6 @@
 {
   "name": "orbit-db-docstore",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Document Store for orbit-db",
   "main": "src/DocumentStore.js",
   "scripts": {
