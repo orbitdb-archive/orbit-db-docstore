@@ -1,21 +1,19 @@
 'use strict'
 
 class DocumentIndex {
-  constructor() {
+  constructor () {
     this._index = {}
   }
 
-  get(key, fullOp = false) {
+  get (key, fullOp = false) {
     return fullOp
       ? this._index[key]
       : this._index[key].payload.value
   }
 
-  updateIndex(oplog, onProgressCallback) {
+  updateIndex (oplog, onProgressCallback) {
     const reducer = (handled, item, idx) => {
-      // if (handled.indexOf(item.payload.key) === -1) {
       if (handled[item.payload.key] !== true) {
-        // handled.push(item.payload.key)
         handled[item.payload.key] = true
         if(item.payload.op === 'PUT') {
           this._index[item.payload.key] = item

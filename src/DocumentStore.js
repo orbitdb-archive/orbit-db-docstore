@@ -8,7 +8,7 @@ const Readable = require('readable-stream')
 const replaceAll = (str, search, replacement) => str.toString().split(search).join(replacement)
 
 class DocumentStore extends Store {
-  constructor(ipfs, id, dbname, options) {
+  constructor (ipfs, id, dbname, options) {
     if (!options) options = {}
     if (!options.indexBy) Object.assign(options, { indexBy: '_id' })
     if (!options.Index) Object.assign(options, { Index: DocumentIndex })
@@ -16,7 +16,7 @@ class DocumentStore extends Store {
     this._type = 'docstore'
   }
 
-  get(key, caseSensitive = false) {
+  get (key, caseSensitive = false) {
     key = key.toString()
     const terms = key.split(' ')
     key = terms.length > 1 ? replaceAll(key, '.', ' ').toLowerCase() : key.toLowerCase()
@@ -37,16 +37,16 @@ class DocumentStore extends Store {
       .map(mapper)
   }
 
-  query(mapper, options = {}) {
+  query (mapper, options = {}) {
     // Whether we return the full operation data or just the db value
     const fullOp = options ? options.fullOp : false
 
     return Object.keys(this._index._index)
       .map((e) => this._index.get(e, fullOp))
-      .filter((e) => mapper(e))
+      .filter(mapper)
   }
 
-  batchPut(docs, onProgressCallback) {
+  batchPut (docs, onProgressCallback) {
     const mapper = (doc, idx) => {
       return this._addOperationBatch(
         {
@@ -64,7 +64,7 @@ class DocumentStore extends Store {
       .then(() => this.saveSnapshot())
   }
 
-  put(doc) {
+  put (doc) {
     if (!doc[this.options.indexBy])
       throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
 
@@ -75,7 +75,7 @@ class DocumentStore extends Store {
     })
   }
 
-  del(key) {
+  del (key) {
     if (!this._index.get(key))
       throw new Error(`No entry with key '${key}' in the database`)
 
