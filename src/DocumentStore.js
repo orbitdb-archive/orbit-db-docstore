@@ -37,9 +37,12 @@ class DocumentStore extends Store {
       .map(mapper)
   }
 
-  query(mapper) {
+  query(mapper, options = {}) {
+    // Whether we return the full operation data or just the db value
+    const fullOp = options ? options.fullOp : false
+
     return Object.keys(this._index._index)
-      .map((e) => this._index.get(e))
+      .map((e) => this._index.get(e, fullOp))
       .filter((e) => mapper(e))
   }
 
