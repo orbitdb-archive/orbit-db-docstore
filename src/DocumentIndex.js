@@ -8,7 +8,7 @@ class DocumentIndex {
   get (key, fullOp = false) {
     return fullOp
       ? this._index[key]
-      : this._index[key].payload.value
+      : this._index[key] ? this._index[key].payload.value : null
   }
 
   updateIndex (oplog, onProgressCallback) {
