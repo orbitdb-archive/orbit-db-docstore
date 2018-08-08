@@ -4,37 +4,47 @@ const Store = require('orbit-db-store')
 const DocumentIndex = require('./DocumentIndex')
 const pMap = require('p-map')
 const Readable = require('readable-stream')
+const elasticlunr = require('elasticlunr')
 
 const replaceAll = (str, search, replacement) => str.toString().split(search).join(replacement)
 
 class DocumentStore extends Store {
   constructor (ipfs, id, dbname, options) {
     if (!options) options = {}
-    if (!options.indexBy) Object.assign(options, { indexBy: '_id' })
+    if (!options.indexBy) Object.assign(options, { indexBy: ['hash'] })
     if (!options.Index) Object.assign(options, { Index: DocumentIndex })
     super(ipfs, id, dbname, options)
+    this._createSearchIndex(options.indexBy)
     this._type = 'docstore'
+  }
+
+  _createSearchIndex(indexKeys = ['_id']) {
+    this.searchIndex = elasticlunr()
+    indexKeys.forEach((indexBy) => {
+      this.searchIndex.addField(indexBy)
+    })
+    this.searchIndex.setRef('hash')
   }
 
   get (key, caseSensitive = false) {
     key = key.toString()
-    const terms = key.split(' ')
-    key = terms.length > 1 ? replaceAll(key, '.', ' ').toLowerCase() : key.toLowerCase()
-
-    const search = (e) => {
-      if (terms.length > 1) {
-        return replaceAll(e, '.', ' ').toLowerCase().indexOf(key) !== -1
-      }
-      return e.toLowerCase().indexOf(key) !== -1
-    }
+    // const terms = key.split(' ')
+    // key = terms.length > 1 ? replaceAll(key, '.', ' ').toLowerCase() : key.toLowerCase()
+    //
+    // const search = (e) => {
+    //   if (terms.length > 1) {
+    //     return replaceAll(e, '.', ' ').toLowerCase().indexOf(key) !== -1
+    //   }
+    //   return e.toLowerCase().indexOf(key) !== -1
+    // }
+    const docs = this.searchIndex.search(key).map(e => e.ref)
     const mapper = e => this._index.get(e)
-    const filter = e => caseSensitive
-      ? e.indexOf(key) !== -1 
-      : search(e)
+    const filter = e => docs.includes(e.hash)
 
-    return Object.keys(this._index._index)
-      .filter(filter)
-      .map(mapper)
+    return docs.map(e => this._index._index[e])
+    // return Object.keys(this._index._index)
+    //   .filter(filter)
+    //   .map(mapper)
   }
 
   query (mapper, options = {}) {
@@ -51,7 +61,6 @@ class DocumentStore extends Store {
       return this._addOperationBatch(
         {
           op: 'PUT',
-          key: doc[this.options.indexBy],
           value: doc
         },
         true,
@@ -64,15 +73,19 @@ class DocumentStore extends Store {
       .then(() => this.saveSnapshot())
   }
 
-  put (doc) {
-    if (!doc[this.options.indexBy])
-      throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
+  async put (doc) {
+    const indexCount = this.options.indexBy.filter(i => doc[i]).length
+    if (indexCount < 1)
+      throw new Error(`The provided document doesn't contain any field from'${this.options.indexBy}'`)
 
-    return this._addOperation({
+    doc.hash = await this._addOperation({
       op: 'PUT',
-      key: doc[this.options.indexBy],
+      key: null,
       value: doc
     })
+
+    this.searchIndex.addDoc(doc)
+    return doc.hash
   }
 
   del (key) {

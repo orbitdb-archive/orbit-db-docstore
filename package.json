@@ -9,6 +9,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
+    "elasticlunr": "^0.9.5",
     "orbit-db-store": "~2.5.0",
     "p-map": "~1.1.1"
   },
