@@ -19,23 +19,16 @@ const IPFS = require('ipfs')
 const OrbitDB = require('orbit-db')
 
 const ipfs = new IPFS({ repo: 'orbitdb/ipfs' });
-ipfs.on('ready', () => {
+ipfs.on('ready', async () => {
   const orbitdb = new OrbitDB(ipfs);
-  const docstore = orbitdb.docstore('dbName');
-
-  docstore.then(() => {
-    docstore.put({ _id: 'hello world', doc: 'all the things' })
-      .then(() => docstore.put({ _id: 'sup world', doc: 'other things' }))
-      .then(() => docstore.get('hello'))
-      .then((value) => console.log(value)) 
-        // [{ _id: 'hello world', doc: 'all the things'}]
-    })
-  });
-  
-  // or
   const docstore = await orbitdb.docstore('dbName');
-});
 
+  await docstore.put({ _id: 'hello world', doc: 'all the things' });
+  await docstore.put({ _id: 'sup world', doc: 'other things' });
+  const matched = await docstore.get('hello');
+  console.log(value);
+    // [{ _id: 'hello world', doc: 'all the things'}]
+});
 ```
 
 You can specify the field to index by in the options:
