@@ -18,22 +18,30 @@ npm install orbit-db-docstore
 const IPFS = require('ipfs')
 const OrbitDB = require('orbit-db')
 
-const ipfs = new IPFS()
-const orbitdb = new OrbitDB(ipfs)
-const docstore = orbitdb.docstore('db name')
+const ipfs = new IPFS({ repo: 'orbitdb/ipfs' });
+ipfs.on('ready', () => {
+  const orbitdb = new OrbitDB(ipfs);
+  const docstore = orbitdb.docstore('dbName');
 
-docstore.put({ _id: 'hello world', doc: 'all the things' })
-  .then(() => docstore.put({ _id: 'sup world', doc: 'other things' }))
-  .then(() => docstore.get('hello'))
-  .then((value) => console.log(value)) 
-  // [{ _id: 'hello world', doc: 'all the things'}]
+  docstore.then(() => {
+    docstore.put({ _id: 'hello world', doc: 'all the things' })
+      .then(() => docstore.put({ _id: 'sup world', doc: 'other things' }))
+      .then(() => docstore.get('hello'))
+      .then((value) => console.log(value)) 
+        // [{ _id: 'hello world', doc: 'all the things'}]
+    })
+  });
+  
+  // or
+  const docstore = await orbitdb.docstore('dbName');
+});
 
 ```
 
 You can specify the field to index by in the options:
 
 ```javascript
-const docstore = orbitdb.docstore('db name', { indexBy: 'doc' })
+const docstore = await orbitdb.docstore('dbName', { indexBy: 'doc' })
 
 docstore.put({ _id: 'hello world', doc: 'some things' })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things' }))
@@ -46,7 +54,7 @@ docstore.put({ _id: 'hello world', doc: 'some things' })
 You can also use a mapper to query the documents
 
 ```javascript
-const docstore = orbitdb.docstore('db name')
+const docstore = await orbitdb.docstore('dbName')
 
 docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things', views: 100 }))
