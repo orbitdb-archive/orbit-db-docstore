@@ -9,6 +9,7 @@ class DocumentStore extends Store {
   constructor (ipfs, id, dbname, options) {
     if (!options) options = {}
     if (!options.indexBy) Object.assign(options, { indexBy: ['hash'] })
+    if (typeof(options.indexBy) === 'string') options.indexBy = [ options.indexBy ]
     if (!options.Index) Object.assign(options, { Index: DocumentIndex })
     super(ipfs, id, dbname, options)
     this._addToLunr(options.indexBy)
