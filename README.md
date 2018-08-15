@@ -108,4 +108,4 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
 
 ## License
 
-[MIT](LICENSE) ©️ 2016-2018 shamb0t, Haja Networks Oy
+[MIT](LICENSE) ©️ 2015-2018 shamb0t, Haja Networks Oy
