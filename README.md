@@ -15,11 +15,17 @@ npm install orbit-db-docstore
 ## Usage
 
 ```javascript
-const IPFS = require('ipfs')
+const IPFS = require('ipfs') // for js version of ipfs
+// const IPFS = require('ipfs-api') // for node.js, using local server such as ipfs-go
+
 const OrbitDB = require('orbit-db')
 
-const ipfs = new IPFS({ repo: 'orbitdb/ipfs' });
-ipfs.on('ready', async () => {
+const ipfs = new IPFS({ repo: 'orbitdb/ipfs', EXPERIMENTAL: { pubsub : true } });
+if (ipfs.on) { // js version has evented interface
+  ipfs.on('ready', runDocStoreTask)
+} else runDocStoreTask();
+
+async function runDocStoreTask () => {
   const orbitdb = new OrbitDB(ipfs);
   const docstore = await orbitdb.docstore('dbName');
 
