@@ -7,13 +7,31 @@ const Readable = require('readable-stream')
 
 const replaceAll = (str, search, replacement) => str.toString().split(search).join(replacement)
 
+// indexes should be in the format: {indexBy: [{field: type}]}
+// type can take either "text" or "numeric"
+// "Text" index is straight-forward
+// "Numeric" index requires storing the max and min value
+
 class DocumentStore extends Store {
   constructor (ipfs, id, dbname, options) {
-    if (!options) options = {}
-    if (!options.indexBy) Object.assign(options, { indexBy: '_id' })
-    if (!options.Index) Object.assign(options, { Index: DocumentIndex })
+    if (!options) options = {};
+
+    Object.assign(options, { indexBy: '_id'})
+
+    if (!options.indexBy) {      
+      this._indexedFields = {_id: {type: 'text'}}   // If there's no index indicated, use _id by default.
+    } else {
+      Object.keys(options.indexBy).forEach(function(index) {
+        this._indexedFields[index].type = options.indexBy[index]        
+      })
+    }     
+      
+    if (!options.Index) 
+      Object.assign(options, { Index: DocumentIndex })
+    
     super(ipfs, id, dbname, options)
     this._type = 'docstore'
+
   }
 
   get (key, caseSensitive = false) {
@@ -37,13 +55,27 @@ class DocumentStore extends Store {
       .map(mapper)
   }
 
-  query (mapper, options = {}) {
+  query (queryObj, options = {}) {
     // Whether we return the full operation data or just the db value
-    const fullOp = options ? options.fullOp : false
+    //const fullOp = options ? options.fullOp : false
+    var shortlisted_result = {}
+    var unindexed_fields = []
+    Object.keys(queryObj).forEach(function(field) {
+      if (this._indexedFields[field]) {
+        var value_to_retrieve = queryObj[field]
+        shortlisted_result[field] = this._indexes[field][value_to_retrieve]
+      } else {
+        unindexed_fields.push(field)
+      }
+    });
 
-    return Object.keys(this._index._index)
-      .map((e) => this._index.get(e, fullOp))
-      .filter(mapper)
+    var value_to_search = []
+    // Find matching records in shortlisted_results
+    Object.keys(shortlisted_result).forEach(function(hash_array) {
+      var 
+    })
+
+    return 
   }
 
   batchPut (docs, onProgressCallback) {
@@ -51,7 +83,7 @@ class DocumentStore extends Store {
       return this._addOperationBatch(
         {
           op: 'PUT',
-          key: doc[this.options.indexBy],
+          key: doc['_id'],
           value: doc
         },
         true,
@@ -65,14 +97,49 @@ class DocumentStore extends Store {
   }
 
   put (doc) {
-    if (!doc[this.options.indexBy])
-      throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
+    // If there is no _id in the object, create one using the current timestamp
+    // precise to the mili-secondth to make sure no two _id's are the same
+    if (!doc['_id'])
+      doc['_id'] = Date.getTime().toString()
 
-    return this._addOperation({
+    // Check if all indexed fields exists in the input object except for _id
+    Object.keys(this._indexedFields).forEach(function(index) {
+      if (index != '_id' && !doc[index])
+        throw new Error(`Field '${index}' doesn't exist in the object.`)
+    });
+
+    // Get the returned hash value and modify the indexes
+    var hash_value = this._addOperation({
       op: 'PUT',
-      key: doc[this.options.indexBy],
+      key: doc['_id'],
       value: doc
     })
+    
+    // Modifying the indexes with new document
+    Object.keys(this._indexedFields).forEach(function(index) {      
+      doc_value_to_index = doc[index]
+      if (!this._indexes[index][doc_value_to_index])
+        this._indexes[index][doc_value_to_index] = []
+      this._indexes[index][doc_value_to_index].push(hash_value)
+      
+      // If the index type is numeric, update the max and min value
+      // FUTURE DEV: index float values in ranges
+      if (this._indexedFields[index][type] == 'numeric') {
+        if (!this._indexedFields[index]min || !this._indexedFields[index].max) {
+          this._indexedFields[index].min = doc_value_to_index
+          this._indexedFields[index].max = doc_value_to_index
+        } else {
+          if (doc_value_to_index < this._indexedFields[index].min)
+            this._indexedFields[index].min = doc_value_to_index
+          else if (doc_value_to_index > this._indexedFields[index].max)
+            this._indexedFields[index].max = doc_value_to_index
+        }
+        
+      }
+    })
+
+
+    return hash_value
   }
 
   del (key) {
