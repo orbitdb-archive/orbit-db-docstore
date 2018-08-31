@@ -41,7 +41,6 @@ const docstore = orbitdb.docstore('db name', { indexBy: {first_name: 'string', a
 
 docstore.put({ first_name: 'Tyra', age: '35', occupation: 'Fashion Model' })
   .then(() => docstore.put({ first_name: 'Lindsay', age: 20, occupation: 'Student'}))
-  // [{ _id: 'hello universe', doc: 'all the things'}]
 
 ```
 
