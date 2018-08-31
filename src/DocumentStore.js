@@ -11,7 +11,7 @@ const replaceAll = (str, search, replacement) => str.toString().split(search).jo
 // indexes should be in the format: {indexBy: [{field: type}]}
 // type can take either "text" or "numeric"
 // "Text" index is straight-forward
-// "Numeric" index requires storing the max and min value
+// "Numeric" index requires storing the max and min value, and integer type
 
 class DocumentStore extends Store {
   constructor (ipfs, id, dbname, options) {
@@ -37,7 +37,7 @@ class DocumentStore extends Store {
     Object.keys(indexBy).forEach(function(index) {
       self._indexes[index] = {}
       self._indexedFields[index] = {}
-      self._indexedFields[index]['type'] = options.indexBy[index]
+      self._indexedFields[index].type = indexBy[index]
     })
     this._type = 'docstore'
 
@@ -75,14 +75,11 @@ class DocumentStore extends Store {
       } else {
         reduced_queryObj[field] = queryObj[field]
       }
-    });
-    console.log(reduced_queryObj)
-    
+    })    
     
     var id_array_to_search = []
     if (JSON.stringify(queryObj) === JSON.stringify(reduced_queryObj)) {
       // If the query contains no indexed field, scan the whole store
-      console.log("No indexed fields found in the query object, gotta scan the whole store")
       id_array_to_search = Object.keys(self._index._index)
     } else {
       // If the query contains at least one indexed field,
@@ -122,6 +119,7 @@ class DocumentStore extends Store {
   }
 
   batchPut (docs, onProgressCallback) {
+    // Using this will not construct the index
     const mapper = (doc, idx) => {
       return this._addOperationBatch(
         {
@@ -141,10 +139,11 @@ class DocumentStore extends Store {
 
   put (doc) {
     var self = this
-    // If there is no _id in the object, create one using the current timestamp
+    // If there is no _id in the object, one will be created using the current timestamp
     // precise to the mili-secondth to make sure no two _id's are the same
+    var time = new Date()
     if (!doc['_id'])
-      doc['_id'] = Date.getTime().toString()
+      doc['_id'] = time.getTime().toString()
 
     // Check if all indexed fields exists in the input object except for _id
     Object.keys(self._indexedFields).forEach(function(index) {
