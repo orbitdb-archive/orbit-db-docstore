@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "orbit-db-store": "~2.5.0",
-    "p-map": "~1.1.1"
+    "p-map": "~1.1.1",
+    "underscore": "^1.9.1"
   },
   "devDependencies": {},
   "repository": {
