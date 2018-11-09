@@ -43,7 +43,7 @@ class DocumentStore extends Store {
 
     return Object.keys(this._index._index)
       .map((e) => this._index.get(e, fullOp))
-      .filter(e => fullOp ? mapper(e.payload.value) : mapper(e))
+      .filter(mapper)
   }
 
   batchPut (docs, onProgressCallback) {
