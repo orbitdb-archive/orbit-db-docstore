@@ -9,7 +9,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "github:orbitdb/orbit-db-store",
+    "orbit-db-store": "github:orbitdb/orbit-db-store#feat/ipfs-dag",
     "p-map": "~1.1.1"
   },
   "devDependencies": {},
