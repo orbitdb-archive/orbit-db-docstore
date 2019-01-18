@@ -6,6 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "orbitdb",
+    "orbit-db"
+    "docstore"
+  ],
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
