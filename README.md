@@ -1,12 +1,25 @@
 # orbit-db-docstore
 
+[![npm](https://img.shields.io/npm/v/orbit-db-docstore.svg)](https://www.npmjs.com/package/orbit-db-docstore)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/orbitdb/Lobby)
+
 > Document Store for orbit-db
 
 Database for storing indexed documents. Stores documents by `_id` field by default but you can also specify a custom field to index by.
 
 *This is a core data store in [orbit-db](https://github.com/haadcode/orbit-db)*
 
+## Table of Contents
+
+	- [Install](#install)
+	- [Usage](#usage)
+	- [API](#api)
+		- [docstore(name, options)](#docstorename-options)
+	- [License](#license)
+
 ## Install
+
+This project uses [npm](https://npmjs.com) and [nodejs](https://nodejs.org)
 
 ```
 npm install orbit-db-docstore
@@ -25,7 +38,7 @@ const docstore = orbitdb.docstore('db name')
 docstore.put({ _id: 'hello world', doc: 'all the things' })
   .then(() => docstore.put({ _id: 'sup world', doc: 'other things' }))
   .then(() => docstore.get('hello'))
-  .then((value) => console.log(value)) 
+  .then((value) => console.log(value))
   // [{ _id: 'hello world', doc: 'all the things'}]
 
 ```
@@ -38,7 +51,7 @@ const docstore = orbitdb.docstore('db name', { indexBy: 'doc' })
 docstore.put({ _id: 'hello world', doc: 'some things' })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things' }))
   .then(() => docstore.get('all'))
-  .then((value) => console.log(value)) 
+  .then((value) => console.log(value))
   // [{ _id: 'hello universe', doc: 'all the things'}]
 
 ```
@@ -52,7 +65,7 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things', views: 100 }))
   .then(() => docstore.put({ _id: 'sup world', doc: 'other things', views: 5 }))
   .then(() => docstore.query((e)=> e.views > 5))
-  .then((value) => console.log(value)) 
+  .then((value) => console.log(value))
   // [{ _id: 'hello world', doc: 'some things', views: 10}, { _id: 'hello universe', doc: 'all the things', views: 100}]
 ```
 
@@ -62,7 +75,7 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
 
 ### docstore(name, options)
 
-  Package: 
+  Package:
   [orbit-db-docstore](https://github.com/shamb0t/orbit-db-docstore)
 
   ```javascript
@@ -79,14 +92,14 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
     ```javascript
     db.put({ _id: 'QmAwesomeIpfsHash', name: 'shamb0t', followers: 500 }).then((hash) => ...)
     ```
-    
+
   - **get(key)**
     ```javascript
     const profile = db.get('shamb0t')
       .map((e) => e.payload.value)
     // [{ _id: 'shamb0t', name: 'shamb0t', followers: 500 }]
     ```
-    
+
   - **query(mapper)**
     ```javascript
     const all = db.query((doc) => doc.followers >= 500)
@@ -97,7 +110,7 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
     ```javascript
     db.del('shamb0t').then((removed) => ...)
     ```
-    
+
   - **events**
 
     ```javascript
@@ -105,6 +118,12 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
     ```
 
     See [events](https://github.com/haadcode/orbit-db/blob/master/API.md#events) for full description.
+
+## Contributing
+
+If you think this could be better, please [open an issue](https://github.com/orbitdb/orbit-db-docstore/issues/new)!
+
+Please note that all interactions in @orbitdb fall under our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
