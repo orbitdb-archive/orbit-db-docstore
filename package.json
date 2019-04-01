@@ -1,6 +1,6 @@
 {
   "name": "orbit-db-docstore",
-  "version": "1.4.3",
+  "version": "1.5.0-rc.1",
   "description": "Document Store for orbit-db",
   "main": "src/DocumentStore.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "github:orbitdb/orbit-db-store",
+    "orbit-db-store": "github:orbitdb/orbit-db-store#feat/backwards-compatible",
     "p-map": "~1.1.1"
   },
   "devDependencies": {},
