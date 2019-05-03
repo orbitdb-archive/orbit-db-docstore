@@ -7,7 +7,7 @@
 
 Database for storing indexed documents. Stores documents by `_id` field by default but you can also specify a custom field to index by.
 
-*This is a core data store in [orbit-db](https://github.com/haadcode/orbit-db)*
+*This is a core data store in [orbit-db](https://github.com/orbitdb/orbit-db)*
 
 ## Table of Contents
 
@@ -32,8 +32,8 @@ const IPFS = require('ipfs')
 const OrbitDB = require('orbit-db')
 
 const ipfs = new IPFS()
-const orbitdb = new OrbitDB(ipfs)
-const docstore = orbitdb.docstore('db name')
+const orbitdb = await OrbitDB.createInstance(ipfs)
+const docstore = await orbitdb.docstore('db name')
 
 docstore.put({ _id: 'hello world', doc: 'all the things' })
   .then(() => docstore.put({ _id: 'sup world', doc: 'other things' }))
@@ -46,7 +46,7 @@ docstore.put({ _id: 'hello world', doc: 'all the things' })
 You can specify the field to index by in the options:
 
 ```javascript
-const docstore = orbitdb.docstore('db name', { indexBy: 'doc' })
+const docstore = await orbitdb.docstore('db name', { indexBy: 'doc' })
 
 docstore.put({ _id: 'hello world', doc: 'some things' })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things' }))
@@ -59,7 +59,7 @@ docstore.put({ _id: 'hello world', doc: 'some things' })
 You can also use a mapper to query the documents
 
 ```javascript
-const docstore = orbitdb.docstore('db name')
+const docstore = await orbitdb.docstore('db name')
 
 docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
   .then(() => docstore.put({ _id: 'hello universe', doc: 'all the things', views: 100 }))
@@ -71,21 +71,21 @@ docstore.put({ _id: 'hello world', doc: 'some things', views: 10 })
 
 ## API
 
-*See [orbit-db API documentation](https://github.com/haadcode/orbit-db/blob/master/API.md) for full details*
+*See [orbit-db API documentation](https://github.com/orbitdb/orbit-db/blob/master/API.md) for full details*
 
 ### docstore(name, options)
 
   Package:
-  [orbit-db-docstore](https://github.com/shamb0t/orbit-db-docstore)
+  [orbit-db-docstore](https://github.com/orbitdb/orbit-db-docstore)
 
   ```javascript
-  const db = orbitdb.docstore('orbit.users.shamb0t.profile')
+  const db = await orbitdb.docstore('orbit.users.shamb0t.profile')
   ```
 
   By default, documents are indexed by field '_id'. You can also specify the field to index by:
 
   ```javascript
-  const db = orbitdb.docstore('orbit.users.shamb0t.profile', { indexBy: 'name' })
+  const db = await orbitdb.docstore('orbit.users.shamb0t.profile', { indexBy: 'name' })
   ```
 
   - **put(doc)**
