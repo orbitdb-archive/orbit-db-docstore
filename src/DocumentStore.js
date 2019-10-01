@@ -8,11 +8,11 @@ const Readable = require('readable-stream')
 const replaceAll = (str, search, replacement) => str.toString().split(search).join(replacement)
 
 class DocumentStore extends Store {
-  constructor (ipfs, id, dbname, options) {
+  constructor (ipfs, identities, id, dbname, options) {
     if (!options) options = {}
     if (!options.indexBy) Object.assign(options, { indexBy: '_id' })
     if (!options.Index) Object.assign(options, { Index: DocumentIndex })
-    super(ipfs, id, dbname, options)
+    super(ipfs, identities, id, dbname, options)
     this._type = 'docstore'
   }
 
@@ -29,7 +29,7 @@ class DocumentStore extends Store {
     }
     const mapper = e => this._index.get(e)
     const filter = e => caseSensitive
-      ? e.indexOf(key) !== -1 
+      ? e.indexOf(key) !== -1
       : search(e)
 
     return Object.keys(this._index._index)
