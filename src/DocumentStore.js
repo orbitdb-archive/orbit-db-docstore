@@ -29,7 +29,7 @@ class DocumentStore extends Store {
     }
     const mapper = e => this._index.get(e)
     const filter = e => caseSensitive
-      ? e.indexOf(key) !== -1 
+      ? e.indexOf(key) !== -1
       : search(e)
 
     return Object.keys(this._index._index)
@@ -84,6 +84,14 @@ class DocumentStore extends Store {
       key: key,
       value: null
     })
+  }
+
+  static async create (ipfs, identity, address, options) {
+    const heads = await Store.loadHeadsFromCache(options.cache, address)
+    if (heads.length > 0) {
+      options = Object.assign(options, { heads })
+    }
+    return new DocumentStore(ipfs, identity, address, options)
   }
 }
 
