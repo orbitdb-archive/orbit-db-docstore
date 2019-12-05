@@ -14,7 +14,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "orbitdb/orbit-db-store#feat/optional-pin",
+    "orbit-db-store": "~3.0.0",
     "p-map": "~1.1.1"
   },
   "devDependencies": {},
