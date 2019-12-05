@@ -29,7 +29,7 @@ class DocumentStore extends Store {
     }
     const mapper = e => this._index.get(e)
     const filter = e => caseSensitive
-      ? e.indexOf(key) !== -1 
+      ? e.indexOf(key) !== -1
       : search(e)
 
     return Object.keys(this._index._index)
@@ -64,7 +64,7 @@ class DocumentStore extends Store {
       .then(() => this.saveSnapshot())
   }
 
-  put (doc) {
+  put (doc, options = {}) {
     if (!doc[this.options.indexBy])
       throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
 
@@ -72,10 +72,10 @@ class DocumentStore extends Store {
       op: 'PUT',
       key: doc[this.options.indexBy],
       value: doc
-    })
+    }, options)
   }
 
-  del (key) {
+  del (key, options = {}) {
     if (!this._index.get(key))
       throw new Error(`No entry with key '${key}' in the database`)
 
@@ -83,7 +83,7 @@ class DocumentStore extends Store {
       op: 'DEL',
       key: key,
       value: null
-    })
+    }, options)
   }
 }
 
