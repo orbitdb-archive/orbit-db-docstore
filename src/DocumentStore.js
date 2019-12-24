@@ -84,7 +84,10 @@ class DocumentStore extends Store {
 
     return this._addOperation({
       op: 'PUTALL',
-      docs
+      docs: docs.map((value) =>{
+        key: value[this.options.indexBy],
+        value
+      }
     }, options)
   }
 
