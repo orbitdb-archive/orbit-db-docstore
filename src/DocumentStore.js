@@ -74,6 +74,19 @@ class DocumentStore extends Store {
       value: doc
     }, options)
   }
+  
+  putAll (docs, options = {}) {
+    if (!(Array.isArray(docs)) {
+       docs = [docs]
+    }
+    if (!(docs.every(d=> d[this.options.indexBy])))
+      throw new Error(`The provided document doesn't contain field '${this.options.indexBy}'`)
+
+    return this._addOperation({
+      op: 'PUTALL',
+      docs
+    }, options)
+  }
 
   del (key, options = {}) {
     if (!this._index.get(key))
