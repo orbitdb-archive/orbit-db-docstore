@@ -17,6 +17,10 @@ class DocumentIndex {
         handled[item.payload.key] = true
         if(item.payload.op === 'PUT') {
           this._index[item.payload.key] = item
+        } else if (item.payload.op === 'PUTALL') {
+          for (docEntry in item.payload.docs) {
+            this._index[docEntry.key] = item // This doesn't work
+          }
         } else if (item.payload.op === 'DEL') {
           delete this._index[item.payload.key]
         }
