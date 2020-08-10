@@ -14,7 +14,7 @@
   "author": "shamb0t",
   "license": "MIT",
   "dependencies": {
-    "orbit-db-store": "~3.3.0",
+    "orbit-db-store": "orbitdb/orbit-db-store#fix/replication-concurrency",
     "p-map": "~1.1.1"
   },
   "devDependencies": {},
