@@ -12,11 +12,11 @@ Database for storing indexed documents. Stores documents by `_id` field by defau
 
 ## Table of Contents
 
-	- [Install](#install)
-	- [Usage](#usage)
-	- [API](#api)
-		- [docstore(name, options)](#docstorename-options)
-	- [License](#license)
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+    - [docstore(name, options)](#docstorename-options)
+- [License](#license)
 
 ## Install
 
