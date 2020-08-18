@@ -18,9 +18,11 @@ class DocumentIndex {
           if (handled[doc.key] !== true) {
             handled[doc.key] = true
             this._index[doc.key] = {
-              op: item.payload.op,
-              key: doc.key,
-              value: doc.value
+              payload: {
+                op: 'PUT',
+                key: doc.key,
+                value: doc.value
+              }
             }
           }
         }
