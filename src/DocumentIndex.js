@@ -33,7 +33,7 @@ class DocumentIndex {
         } else if (item.payload.op === 'DEL') {
           delete this._index[item.payload.key]
         } else if (item.payload.op === 'EDIT') {
-          if(this._index[item.payload.key]){
+          if (this._index[item.payload.key]) {
             const vals = this._index[item.payload.key].payload.value;
             for (const elem in item.payload.value) if (elem in vals) vals[elem] = item.payload.value[elem];
             this._index[item.payload.key].value = vals
