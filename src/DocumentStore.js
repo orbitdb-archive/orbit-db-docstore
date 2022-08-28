@@ -98,7 +98,7 @@ class DocumentStore extends Store {
     }, options)
   }
 
-  edit (key, options = {}, edits) {
+  edit (key, options = {}, edits = {}) {
     if (!this._index.get(key)) { throw new Error(`No entry with key '${key}' in the database`) }
       
     return this._addOperation({
