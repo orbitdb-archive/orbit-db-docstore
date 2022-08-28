@@ -13,13 +13,11 @@ class DocumentIndex {
 
   updateIndex (oplog, onProgressCallback) {
     const values = oplog.values
-    const handled = {}
       for (let i  = 0; i <= values.length -1; i++) {
       const item = values[i]
       if (item.payload.op === 'PUTALL' && item.payload.docs && item.payload.docs[Symbol.iterator]) {
         for (const doc of item.payload.docs) {
-          if (doc && !handled[doc.key]) {
-            handled[doc.key] = true
+          if (doc) {
             this._index[doc.key] = {
               payload: {
                 op: 'PUT',
@@ -29,8 +27,7 @@ class DocumentIndex {
             }
           }
         }
-      } else if (!handled[item.payload.key]) {
-        if (item.payload.op === 'PUT') {
+      } if (item.payload.op === 'PUT') {
           this._index[item.payload.key] = item
         } else if (item.payload.op === 'DEL') {
           delete this._index[item.payload.key]
@@ -39,7 +36,6 @@ class DocumentIndex {
             Object.assign(this._index[item.payload.key].payload.value,item.payload.value)
           }
         }
-      }
       if (onProgressCallback) {
         onProgressCallback(item, values.length - i)
       }
