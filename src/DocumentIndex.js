@@ -31,7 +31,7 @@ class DocumentIndex {
           this._index[item.payload.key] = item
         } else if (item.payload.op === 'DEL') {
           delete this._index[item.payload.key]
-        } else if (item.payload.op === 'EDIT') {
+        } else if (item.payload.op === 'SET') {
           if (this._index[item.payload.key]) {
             Object.assign(this._index[item.payload.key].payload.value,item.payload.value)
           }
