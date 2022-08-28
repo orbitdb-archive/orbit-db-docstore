@@ -43,6 +43,7 @@ class DocumentIndex {
       if (onProgressCallback) onProgressCallback(item, idx)
       return handled
     }
+    
     oplog.values
       .slice()
       .reverse()
