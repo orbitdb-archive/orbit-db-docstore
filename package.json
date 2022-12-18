@@ -2,9 +2,11 @@
   "name": "orbit-db-docstore",
   "version": "1.12.0",
   "description": "Document Store for orbit-db",
-  "main": "src/DocumentStore.js",
+  "type": "module",
+  "main": "./src/DocumentStore.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "keywords": [
     "orbitdb",
@@ -17,9 +19,11 @@
     "p-map": "~1.1.1"
   },
   "peerDependencies": {
-    "orbit-db-store": "4.x"
+    "orbit-db-store": "github:haydenyoung/orbit-db-store#esm"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "standard": "^17.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/orbitdb/orbit-db-docstore.git"
