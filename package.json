@@ -21,9 +21,6 @@
   "peerDependencies": {
     "orbit-db-store": "github:haydenyoung/orbit-db-store#esm"
   },
-  "devDependencies": {
-    "standard": "^17.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/orbitdb/orbit-db-docstore.git"
@@ -36,5 +33,8 @@
     "haad <haad@haja.io>",
     "shamb0t <shams@haja.io>",
     "hajamark <mark@haja.io>"
-  ]
+  ],
+  "devDependencies": {
+    "standard": "^17.0.0"
+  }
 }
