@@ -1,13 +1,10 @@
-'use strict'
-
-const Store = require('orbit-db-store')
-const DocumentIndex = require('./DocumentIndex')
-const pMap = require('p-map')
-const Readable = require('readable-stream')
+import Store from 'orbit-db-store'
+import DocumentIndex from './DocumentIndex.js'
+import pMap from 'p-map'
 
 const replaceAll = (str, search, replacement) => str.toString().split(search).join(replacement)
 
-class DocumentStore extends Store {
+export default class DocumentStore extends Store {
   constructor (ipfs, id, dbname, options) {
     if (!options) options = {}
     if (!options.indexBy) Object.assign(options, { indexBy: '_id' })
@@ -93,10 +90,8 @@ class DocumentStore extends Store {
 
     return this._addOperation({
       op: 'DEL',
-      key: key,
+      key,
       value: null
     }, options)
   }
 }
-
-module.exports = DocumentStore

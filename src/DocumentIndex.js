@@ -1,6 +1,4 @@
-'use strict'
-
-class DocumentIndex {
+export default class DocumentIndex {
   constructor () {
     this._index = {}
   }
@@ -44,5 +42,3 @@ class DocumentIndex {
       .reduce(reducer, {})
   }
 }
-
-module.exports = DocumentIndex
