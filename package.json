@@ -19,7 +19,7 @@
     "p-map": "~1.1.1"
   },
   "peerDependencies": {
-    "orbit-db-store": "github:orbitdb/orbit-db-store#esm"
+    "orbit-db-store": "next"
   },
   "repository": {
     "type": "git",
