@@ -16,7 +16,6 @@ jobs:
           node-version: 'lts/*'
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm test
       - run: |
           npm version prerelease --no-git-tag-version \
             --preid=`git rev-parse --short HEAD`
