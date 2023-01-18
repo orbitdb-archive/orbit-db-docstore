@@ -1,6 +1,6 @@
 {
   "name": "orbit-db-docstore",
-  "version": "1.12.0",
+  "version": "2.0.0",
   "description": "Document Store for orbit-db",
   "type": "module",
   "main": "./src/DocumentStore.js",
@@ -19,7 +19,7 @@
     "p-map": "~1.1.1"
   },
   "peerDependencies": {
-    "orbit-db-store": "next"
+    "orbit-db-store": "*"
   },
   "repository": {
     "type": "git",
