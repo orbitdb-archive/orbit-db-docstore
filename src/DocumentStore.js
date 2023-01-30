@@ -94,4 +94,14 @@ export default class DocumentStore extends Store {
       value: null
     }, options)
   }
+
+  set (key, edits = {}, options = {}) {
+    if (!this._index.get(key)) { throw new Error(`No entry with key '${key}' in the database`) }
+      
+    return this._addOperation({
+      op: 'SET',
+      key: key,
+      value: edits
+    }, options)
+  }
 }
