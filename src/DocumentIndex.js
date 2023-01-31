@@ -10,10 +10,13 @@ export default class DocumentIndex {
   }
 
   updateIndex (oplog, onProgressCallback) {
-    const reducer = (handled, item, idx) => {
-      if (item.payload.op === 'PUTALL' && item.payload.docs[Symbol.iterator]) {
+    const values = oplog.values
+    const handled = {}
+    for (let i = values.length - 1; i >= 0; i--) {
+      const item = values[i]
+      if (item.payload.op === 'PUTALL' && item.payload.docs && item.payload.docs[Symbol.iterator]) {
         for (const doc of item.payload.docs) {
-          if (doc && handled[doc.key] !== true) {
+          if (doc && !handled[doc.key]) {
             handled[doc.key] = true
             this._index[doc.key] = {
               payload: {
@@ -24,7 +27,7 @@ export default class DocumentIndex {
             }
           }
         }
-      } else if (handled[item.payload.key] !== true) {
+      } else if (!handled[item.payload.key]) {
         handled[item.payload.key] = true
         if (item.payload.op === 'PUT') {
           this._index[item.payload.key] = item
@@ -32,13 +35,8 @@ export default class DocumentIndex {
           delete this._index[item.payload.key]
         }
       }
-      if (onProgressCallback) onProgressCallback(item, idx)
-      return handled
-    }
-
-    oplog.values
-      .slice()
-      .reverse()
-      .reduce(reducer, {})
-  }
+      if (onProgressCallback) {
+        onProgressCallback(item, values.length - i)
+      }
+   }
 }
